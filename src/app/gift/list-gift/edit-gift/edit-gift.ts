@@ -1,6 +1,8 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component} from '@angular/core';
 import { GiftService } from '../../../service/gift.service';
 import { Gift } from '../../../models/gift';
+import { Category } from '../../../models/category';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-edit-gift',
@@ -10,25 +12,34 @@ import { Gift } from '../../../models/gift';
 })
 export class EditGift {
 
+  giftForm = new FormGroup({
+    name: new FormControl('', Validators.required),
+    description: new FormControl(''),
+    value: new FormControl('', [Validators.required, Validators.pattern('^[0-9]+(\.[0-9]{1,2})?$')]), // Regex para aceitar apenas números e até duas casas decimaisValidators.required),
+    categoryId: new FormControl('', Validators.required),
+    image: new FormControl('')
+  });
 
-  @ViewChild('nameInput') nameInputRef!: ElementRef;
-  @ViewChild('descriptionInput') descriptionInputRef!: ElementRef;
-  @ViewChild('valueInput') valueInputRef!: ElementRef;
-  @ViewChild('categoryInput') categoryInputRef!: ElementRef;
-  @ViewChild('imageInput') imageInputRef!: ElementRef;
+  categoryList: Category[] = [
+    new Category('1', 'Eletrônicos'),
+    new Category('2', 'Roupas'),
+    new Category('3', 'Livros'),
+    new Category('4', 'Brinquedos'),
+    new Category('5', 'Casa e Cozinha')
+  ];
 
   constructor(private giftService: GiftService) { }
 
   addGift() {
-    const giftName = this.nameInputRef.nativeElement.value;
-    const giftdescription = this.descriptionInputRef.nativeElement.value;
-    const giftvalue = this.valueInputRef.nativeElement.value;
-    const giftcategory = this.categoryInputRef.nativeElement.value;
-    const giftimage = this.imageInputRef.nativeElement.value;
-    const newGift = new Gift(giftName, giftdescription, giftvalue, giftcategory, giftimage);
+    if (this.giftForm.valid) {
+      const { name, description, value, categoryId, image } = this.giftForm.value;
+      const category = this.categoryList.find(cat => cat.id === categoryId) || new Category();
+      if (!category) return;
 
-    this.giftService.addGift(newGift);
-
+      const newGift = new Gift('', name || '', description || '', value || '', category, image || '');
+      this.giftService.addGift(newGift);
+      this.giftForm.reset();
+    }
   }
-
+    
 }
