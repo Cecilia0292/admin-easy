@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand fw-bold" href="#">MeuApp</a>
+        <a class="navbar-brand fw-bold" href="#">Easy Gift Admin</a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Alternar navegação">
@@ -32,35 +32,54 @@
 <main class="container mt-4">
     <div class="card shadow-sm">
         <div class="card-body">
-            <h5 class="card-title mb-3">Cadastro de Item</h5>
+            <h5 class="card-title mb-3">Cadastro de presentes</h5>
 
             <form>
                 <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="name" class="form-label">Nome</label>
+                    <div class="col-md-4 mb-3">
+                        <label for="name" class="form-label">Nome Pt-br</label>
                         <input type="text" id="name" class="form-control" #nameInput />
                     </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label for="description" class="form-label">Descrição</label>
-                        <textarea id="description" class="form-control" formControlName="description"
-                            rows="6"></textarea>
+                    <div class="col-md-4 mb-3">
+                        <label for="name" class="form-label">Nome En</label>
+                        <input type="text" id="name" class="form-control" #nameInput />
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="name" class="form-label">Nome Es</label>
+                        <input type="text" id="name" class="form-control" #nameInput />
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-4 mb-3">
-                        <label for="value" class="form-label">Valor</label>
-                        <input type="number" id="value" class="form-control" #valueInput />
+                        <label for="description" class="form-label">Descrição PT-BR</label>
+                        <textarea id="description" class="form-control" formControlName="description"
+                            rows="3"></textarea>
                     </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="description" class="form-label">Descrição EN</label>
+                        <textarea id="description" class="form-control" formControlName="description"
+                            rows="3"></textarea>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="description" class="form-label">Descrição ES</label>
+                        <textarea id="description" class="form-control" formControlName="description"
+                            rows="3"></textarea>
+                    </div>
+                </div>
 
-                    <div class="col-md-8 mb-3">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
                         <label for="category" class="form-label">Categoria</label>
                         <select id="category" class="form-select" #categoryInput>
                             @for (cat of categoryList; track cat.id) {
                             <option [value]="cat.id">{{ cat.name }}</option>
                             }
                         </select>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="name" class="form-label">Valor</label>
+                        <input type="text" id="name" class="form-control" #nameInput />
                     </div>
                 </div>
 
