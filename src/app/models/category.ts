@@ -1,10 +1,11 @@
+import { Translation } from "./translation";
+
 export class Category {
     id: string = '';
-    name: string = '';
+    translations: Translation[] = [];
 
-    constructor(id: string = '', name: string = '') 
-    {
+    constructor(id: string = '', translations: Translation[] = []) {
         this.id = id;
-        this.name = name;
+        this.translations = translations;
     }
 }

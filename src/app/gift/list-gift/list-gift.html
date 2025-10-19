@@ -4,9 +4,10 @@
         <hr>
         <ul class="list-group">
             @for (gift of giftList; track $index){
-                <a href="#" class="list-group-item clearfix" class="list-group-item" style="cursor:pointer">
-                    {{gift.name}} {{gift.description}} {{gift.category.name}} - R$ {{gift.value}} {{gift.image}}
-                </a>
+            <a href="#" class="list-group-item clearfix" class="list-group-item" style="cursor:pointer">
+                {{gift.name}} {{gift.description}} {{gift.category.translations[0].name}} - R$ {{gift.value}}
+                {{gift.image}}
+            </a>
             }
         </ul>
     </div>

@@ -73,7 +73,7 @@
                         <label for="category" class="form-label">Categoria</label>
                         <select id="category" class="form-select" #categoryInput>
                             @for (cat of categoryList; track cat.id) {
-                            <option [value]="cat.id">{{ cat.name }}</option>
+                            <option [value]="cat.id">{{ cat.translations[0].name }}</option>
                             }
                         </select>
                     </div>
