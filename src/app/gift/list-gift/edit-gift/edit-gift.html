@@ -1,45 +1,107 @@
-<div class="row mb-2 mt-2">
-    <div class="col-12">
-        <form>
-            <div class="row">
-                <div class="col-dm-6 form-group">
-                    <label for="name">Nome</label>
-                    <input type="text" id="name" class="form-control" #nameInput>
-                </div>
-                <div class="col-dm-6 form-group">
-                    <label for="description">Descrição</label>
-                    <textarea id="description" class="form-control" formControlName="description" rows="6"></textarea>
-                </div>
-            </div>
-            <div class="row mt-2">
-                <div class="col-md-4 form-group">
-                    <label for="value">Valor</label>
-                    <input type="number" id="value" class="form-control" #valueInput>
-                </div>
-                <div class="col-sm-8 form-group">
-                    <label for="category">Categoria</label>
-                    <select id="category" class="form-control" #categoryInput>
-                        @for (cat of categoryList; track cat.id) {
-                        <option [value]="cat.id">{{ cat.name }}</option>
-                        }
-                    </select>
-                </div>
-            </div>
-            <div class="row mt-2">
-                <div class="col-sm-4 form-group">
-                    <label for="image">Imagem</label>
-                    <input type="file" id="image" class="form-control-file" #imageInput>
-                </div>
-            </div>
-            <div class="row mt-2">
-                <div class="col-12">
-                    <button type="button" class="btn btn-success mx-md-1" (click)="addGift()">Incluir</button>
-                    <button type="button" class="btn btn-danger mx-md-1">Remover</button>
-                    <button type="button" class="btn btn-primary mx-md-1">Limpar</button>
-                </div>
-            </div>
-        </form>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand fw-bold" href="#">Easy Gift Admin</a>
 
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Alternar navegação">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav align-items-center">
+                <li class="nav-item mx-2">
+                    <a class="nav-link" href="#" (click)="openProfile()">
+                        <i class="bi bi-person-circle me-1">Perfil</i>
+                    </a>
+                </li>
+                <li class="nav-item mx-2">
+                    <a class="nav-link" href="#" (click)="openAbout()">
+                        <i class="bi bi-info-circle me-1">Sobre</i>
+                    </a>
+                </li>
+                <li class="nav-item mx-2">
+                    <a class="nav-link text-danger fw-semibold" href="#" (click)="logout()">
+                        <i class="bi bi-box-arrow-right me-1">Logout</i>
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
+</nav>
 
-</div>
+<main class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title mb-3">Cadastro de presentes</h5>
+
+            <form>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label for="name" class="form-label">Nome Pt-br</label>
+                        <input type="text" id="name" class="form-control" #nameInput />
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="name" class="form-label">Nome En</label>
+                        <input type="text" id="name" class="form-control" #nameInput />
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="name" class="form-label">Nome Es</label>
+                        <input type="text" id="name" class="form-control" #nameInput />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label for="description" class="form-label">Descrição PT-BR</label>
+                        <textarea id="description" class="form-control" formControlName="description"
+                            rows="3"></textarea>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="description" class="form-label">Descrição EN</label>
+                        <textarea id="description" class="form-control" formControlName="description"
+                            rows="3"></textarea>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="description" class="form-label">Descrição ES</label>
+                        <textarea id="description" class="form-control" formControlName="description"
+                            rows="3"></textarea>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="category" class="form-label">Categoria</label>
+                        <select id="category" class="form-select" #categoryInput>
+                            @for (cat of categoryList; track cat.id) {
+                            <option [value]="cat.id">{{ cat.name }}</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="name" class="form-label">Valor</label>
+                        <input type="text" id="name" class="form-control" #nameInput />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="image" class="form-label">Imagem</label>
+                        <input type="file" id="image" class="form-control" #imageInput />
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="button" class="btn btn-success" (click)="addGift()">
+                        <i class="bi bi-plus-circle me-1"></i> Incluir
+                    </button>
+                    <button type="button" class="btn btn-danger">
+                        <i class="bi bi-trash me-1"></i> Remover
+                    </button>
+                    <button type="button" class="btn btn-primary">
+                        <i class="bi bi-arrow-counterclockwise me-1"></i> Limpar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>

@@ -1,4 +1,4 @@
-import { Component} from '@angular/core';
+import { Component } from '@angular/core';
 import { GiftService } from '../../../service/gift.service';
 import { Gift } from '../../../models/gift';
 import { Category } from '../../../models/category';
@@ -41,5 +41,11 @@ export class EditGift {
       this.giftForm.reset();
     }
   }
-    
+
+  openProfile() { }
+  t
+  openAbout() { }
+
+  logout() { }
+
 }
