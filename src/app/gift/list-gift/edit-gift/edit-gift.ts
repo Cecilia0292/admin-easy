@@ -43,7 +43,7 @@ export class EditGift {
   }
 
   openProfile() { }
-
+  t
   openAbout() { }
 
   logout() { }
