@@ -1,3 +1,10 @@
-export class Translation {
-    constructor(public name: string, public description: string) { }
+export interface Translation {
+    name: string;
+    description: string;
+}
+
+export interface Translations {
+    en: Translation;
+    pt: Translation;
+    es: Translation;
 }

@@ -1,11 +1,8 @@
-import { Translation } from "./translation";
+import { Translations } from "./translation";
 
-export class Category {
-    id: string = '';
-    translations: Translation[] = [];
+export interface Category {
+    id: string;
+    translations: Translations;
 
-    constructor(id: string = '', translations: Translation[] = []) {
-        this.id = id;
-        this.translations = translations;
-    }
+    displayName?: string;
 }

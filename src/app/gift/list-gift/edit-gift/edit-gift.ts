@@ -41,16 +41,29 @@ export class EditGift implements OnInit {
   }
 
   addGift() {
-    if (this.giftForm.valid) {
-      const { name, description, value, categoryId, image } = this.giftForm.value;
-      const category = this.categoryList.find(cat => cat.id === categoryId);
-      if (!category) return;
+    if (this.giftForm.invalid) return;
 
-      const newGift = new Gift('', name || '', description || '', value || '', category, image || '');
-      this.giftService.addGift(newGift);
-      this.giftForm.reset();
+    const { name, description, value, categoryId, image } = this.giftForm.value;
+    const category = this.categoryList.find(cat => cat.id === categoryId);
+
+    if (!category) {
+      console.warn('Categoria não encontrada.');
+      return;
     }
+
+    const newGift: Gift = {
+      id: '',
+      name: name || '',
+      description: description || '',
+      value: value || '',
+      category,
+      image: image || ''
+    };
+
+    this.giftService.addGift(newGift);
+    this.giftForm.reset();
   }
+
 
   openProfile() { }
   openAbout() { }
