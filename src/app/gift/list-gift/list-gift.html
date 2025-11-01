@@ -3,11 +3,11 @@
         <app-edit-gift></app-edit-gift>
         <hr>
         <ul class="list-group">
-            @for (gift of giftList; track $index){
-                <a href="#" class="list-group-item clearfix" class="list-group-item" style="cursor:pointer">
-                    {{gift.name}} {{gift.description}} {{gift.category.name}} - R$ {{gift.value}} {{gift.image}}
-                </a>
-            }
+            <a *ngFor="let gift of giftList; let i = index" href="#" class="list-group-item clearfix"
+                style="cursor:pointer">
+                {{gift.name}} {{gift.description}} {{gift.category.translations.en.name}} - R$ {{gift.value}}
+                {{gift.image}}
+            </a>
         </ul>
     </div>
 </div>

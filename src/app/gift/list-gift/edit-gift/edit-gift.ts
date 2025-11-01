@@ -1,51 +1,106 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { GiftService } from '../../../service/gift.service';
-import { Gift } from '../../../models/gift';
 import { Category } from '../../../models/category';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-edit-gift',
-  imports: [],
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule], // ✅ IMPORTANTE AQUI
   templateUrl: './edit-gift.html',
-  styleUrl: './edit-gift.css'
+  styleUrls: ['./edit-gift.css']
 })
-export class EditGift {
+export class EditGift implements OnInit {
 
   giftForm = new FormGroup({
-    name: new FormControl('', Validators.required),
-    description: new FormControl(''),
-    value: new FormControl('', [Validators.required, Validators.pattern('^[0-9]+(\.[0-9]{1,2})?$')]), // Regex para aceitar apenas números e até duas casas decimaisValidators.required),
-    categoryId: new FormControl('', Validators.required),
-    image: new FormControl('')
+    namePt: new FormControl('', Validators.required),
+    nameEn: new FormControl('', Validators.required),
+    nameEs: new FormControl('', Validators.required),
+
+    descPt: new FormControl(''),
+    descEn: new FormControl(''),
+    descEs: new FormControl(''),
+
+    value: new FormControl('', [
+      Validators.required,
+      Validators.pattern('^[0-9]+(\\.[0-9]{1,2})?$')
+    ]),
+    categoryId: new FormControl('', Validators.required)
   });
 
-  categoryList: Category[] = [
-    new Category('1', 'Eletrônicos'),
-    new Category('2', 'Roupas'),
-    new Category('3', 'Livros'),
-    new Category('4', 'Brinquedos'),
-    new Category('5', 'Casa e Cozinha')
-  ];
+  categoryList: Category[] = [];
+  selectedFile: File | null = null;
 
   constructor(private giftService: GiftService) { }
 
-  addGift() {
-    if (this.giftForm.valid) {
-      const { name, description, value, categoryId, image } = this.giftForm.value;
-      const category = this.categoryList.find(cat => cat.id === categoryId) || new Category();
-      if (!category) return;
-
-      const newGift = new Gift('', name || '', description || '', value || '', category, image || '');
-      this.giftService.addGift(newGift);
-      this.giftForm.reset();
-    }
+  ngOnInit(): void {
+    this.loadCategories();
   }
 
+  private loadCategories(): void {
+    this.giftService.getCategories().subscribe({
+      next: (categories) => (this.categoryList = categories),
+      error: (err) => console.error('Erro ao carregar categorias:', err)
+    });
+  }
+
+  onFileSelected(event: any): void {
+    const file = event.target.files[0];
+    if (file) this.selectedFile = file;
+  }
+
+  buildGiftRequest() {
+    const form = this.giftForm.value;
+
+    // Busca a categoria selecionada
+    const selectedCategory = this.categoryList.find(cat => cat.id === form.categoryId);
+
+    if (!selectedCategory) {
+      console.warn('Categoria não encontrada!');
+      return null; // evita enviar requisição inválida
+    }
+
+    // Monta o objeto para o backend
+    return {
+      categories: [selectedCategory], // 👈 agora vai o objeto completo
+      value: form.value,
+      translations: {
+        pt: { name: form.namePt, description: form.descPt },
+        en: { name: form.nameEn, description: form.descEn },
+        es: { name: form.nameEs, description: form.descEs }
+      }
+    };
+  }
+
+  addGift() {
+    if (this.giftForm.invalid) {
+      console.warn('Formulário inválido');
+      return;
+    }
+
+    const giftRequest = this.buildGiftRequest();
+    if (!giftRequest) return; // se a categoria não foi encontrada
+
+    console.log('JSON enviado:', JSON.stringify(giftRequest, null, 2));
+
+    const formData = new FormData();
+    formData.append('data', new Blob([JSON.stringify(giftRequest)], { type: 'application/json' }));
+
+    if (this.selectedFile) {
+      formData.append('file', this.selectedFile);
+    }
+
+    // Chama o serviço que já trata o subscribe e atualiza giftList
+    this.giftService.saveGift(formData);
+
+    // Limpa o formulário e arquivo selecionado
+    this.giftForm.reset();
+    this.selectedFile = null;
+  }
+
+
   openProfile() { }
-  t
   openAbout() { }
-
   logout() { }
-
 }

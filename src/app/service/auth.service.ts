@@ -3,7 +3,7 @@ import { AuthRepository } from "../repository/auth.repositoy";
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 
-const currentKey = 'currentUser';
+export const currentKey = 'currentUser';
 
 @Injectable({
     providedIn: 'root'
