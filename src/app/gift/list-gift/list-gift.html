@@ -1,13 +1,41 @@
 <div class="row">
-    <div class="col-sm-12">
-        <app-edit-gift></app-edit-gift>
-        <hr>
-        <ul class="list-group">
-            <a *ngFor="let gift of giftList; let i = index" href="#" class="list-group-item clearfix"
-                style="cursor:pointer">
-                {{gift.name}} {{gift.description}} {{gift.category.translations.en.name}} - R$ {{gift.value}}
-                {{gift.image}}
-            </a>
-        </ul>
+  <div class="col-12 mb-3">
+    <app-edit-gift></app-edit-gift>
+  </div>
+
+  <div class="col-12">
+    <h5 class="mb-3">Lista de Presentes</h5>
+    <div *ngIf="giftList?.length; else emptyList">
+      <div class="row">
+        <div *ngFor="let gift of giftList" class="col-md-4 mb-4">
+          <div class="card h-100 shadow-sm">
+            <img *ngIf="gift.image?.data" [src]="'data:image/png;base64,' + gift.image?.data" class="card-img-top"
+              alt="Imagem do presente" style="object-fit: cover; height: 180px;" />
+
+            <div class="card-body">
+              <h5 class="card-title">{{ gift.translation.pt.name || 'Sem nome' }}</h5>
+              <p class="card-text text-muted small">
+                {{ gift.translation.pt.description || 'Sem descrição' }}
+              </p>
+
+              <p class="mb-1">
+                <strong>Categoria:</strong>
+                {{ gift.categories[0]?.translations?.pt?.name || 'Sem categoria' }}
+              </p>
+
+              <p class="mb-0">
+                <strong>Valor:</strong> R$ {{ gift.value }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+
+    <ng-template #emptyList>
+      <div class="alert alert-info text-center mt-3">
+        Nenhum presente cadastrado ainda.
+      </div>
+    </ng-template>
+  </div>
 </div>
