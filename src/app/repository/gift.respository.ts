@@ -46,5 +46,12 @@ export class GiftRepository {
       headers: this.getAuthHeaders(null) // importante: não definir Content-Type manualmente
     });
   }
+
+  // 🗂️ Busca todos os presentes
+  getAllGifts(): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/gift/getAll`, {
+      headers: this.getAuthHeaders()
+    });
+  }
 }
 

@@ -91,15 +91,14 @@ export class EditGift implements OnInit {
       formData.append('file', this.selectedFile);
     }
 
-    this.giftService.saveGift(formData).subscribe({
-      next: (response) => {
-        console.log('Presente salvo com sucesso!', response);
-        this.giftForm.reset();
-        this.selectedFile = null;
-      },
-      error: (err) => console.error('Erro ao salvar presente:', err)
-    });
+    // Chama o serviço que já trata o subscribe e atualiza giftList
+    this.giftService.saveGift(formData);
+
+    // Limpa o formulário e arquivo selecionado
+    this.giftForm.reset();
+    this.selectedFile = null;
   }
+
 
   openProfile() { }
   openAbout() { }

@@ -7,33 +7,48 @@ import { catchError, of, tap } from 'rxjs';
 import { Observable } from 'rxjs';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class GiftService {
-    giftChanged = new EventEmitter<Gift[]>();
-    private giftList: Gift[] = [];
-    constructor(private readonly repo: GiftRepository) { }
+  giftChanged = new EventEmitter<Gift[]>();
+  private giftList: Gift[] = [];
 
-    getGiftList() {
-        return this.giftList.slice(); // traz a copia do array
-    }
+  constructor(private readonly repo: GiftRepository) { }
 
-    addGift(newGift: Gift) {
-        this.giftList.push(newGift);
+  // retorna a cópia do array atual
+  getGiftList(): Gift[] {
+    return this.giftList.slice();
+  }
+
+  // carrega todos os presentes do backend
+  loadGifts(): void {
+    this.repo.getAllGifts().subscribe({
+      next: (gifts: Gift[]) => {
+        this.giftList = gifts;
         this.giftChanged.emit(this.giftList.slice());
-    }
+      },
+      error: (err) => console.error('Erro ao carregar presentes:', err)
+    });
+  }
 
-    getCategories() {
-        return this.repo.getAllCategories().pipe(
-            tap(value => console.log('Categorias carregadas:', value)),
-            catchError(err => {
-                console.error('Erro ao buscar categorias:', err);
-                return of([] as Category[]);
-            })
-        );
-    }
+  // salva um presente e atualiza a lista
+  saveGift(formData: FormData): void {
+    this.repo.saveGift(formData).subscribe({
+      next: (gifts: Gift[]) => {
+        this.giftList = gifts; // backend já retorna a lista completa
+        this.giftChanged.emit(this.giftList.slice());
+      },
+      error: (err) => console.error('Erro ao salvar presente:', err)
+    });
+  }
 
-    saveGift(formData: FormData): Observable<any> {
-        return this.repo.saveGift(formData);
-    }
+  getCategories() {
+    return this.repo.getAllCategories().pipe(
+      tap(value => console.log('Categorias carregadas:', value)),
+      catchError(err => {
+        console.error('Erro ao buscar categorias:', err);
+        return of([] as Category[]);
+      })
+    );
+  }
 }
