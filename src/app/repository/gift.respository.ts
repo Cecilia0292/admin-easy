@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { map, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Category } from '../models/category';
 
 @Injectable({
@@ -11,42 +11,40 @@ export class GiftRepository {
   private readonly http = inject(HttpClient);
   private readonly currentKey = 'currentUser';
 
-  private getAuthHeaders(): HttpHeaders {
+  private getAuthHeaders(contentType: string | null = 'application/json'): HttpHeaders {
     const stored = localStorage.getItem(this.currentKey);
-    if (!stored) {
-      console.warn('Nenhum usuário autenticado encontrado.');
-      return new HttpHeaders();
-    }
+    let headers = new HttpHeaders();
 
-    try {
-      const user = JSON.parse(stored);
-      if (!user.accessToken) {
-        console.warn('Token de acesso não encontrado no usuário.');
-        return new HttpHeaders();
+    if (stored) {
+      try {
+        const user = JSON.parse(stored);
+        if (user.accessToken) {
+          headers = headers.set('Authorization', `Bearer ${user.accessToken}`);
+        }
+      } catch (err) {
+        console.error('Erro ao ler o usuário do localStorage:', err);
       }
-
-      return new HttpHeaders({
-        Authorization: `Bearer ${user.accessToken}`,
-        'Content-Type': 'application/json'
-      });
-    } catch (err) {
-      console.error('Erro ao ler o usuário do localStorage:', err);
-      return new HttpHeaders();
     }
+
+    if (contentType) {
+      headers = headers.set('Content-Type', contentType);
+    }
+
+    return headers;
   }
 
+  /** 🗂️ Busca todas as categorias */
   getAllCategories(): Observable<Category[]> {
-    return this.http
-      .get<Category[]>(`${this.baseUrl}/gift/getAllCategories`)
-      .pipe(
-        map(categories =>
-          categories.map(cat => ({
-            ...cat,
-            displayName:
-              cat.translations?.en.name
-          }))
-        )
-      );
+    return this.http.get<Category[]>(`${this.baseUrl}/gift/getAllCategories`, {
+      headers: this.getAuthHeaders()
+    });
   }
 
+  /** 💾 Salva um presente (multipart/form-data) */
+  saveGift(formData: FormData): Observable<any> {
+    return this.http.post(`${this.baseUrl}/gift/save`, formData, {
+      headers: this.getAuthHeaders(null) // importante: não definir Content-Type manualmente
+    });
+  }
 }
+

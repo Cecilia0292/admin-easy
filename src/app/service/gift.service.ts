@@ -4,6 +4,7 @@ import { Category } from '../models/category';
 import { Injectable } from '@angular/core';
 import { GiftRepository } from '../repository/gift.respository';
 import { catchError, of, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
@@ -11,7 +12,7 @@ import { catchError, of, tap } from 'rxjs';
 export class GiftService {
     giftChanged = new EventEmitter<Gift[]>();
     private giftList: Gift[] = [];
-    private repository = new GiftRepository();
+    constructor(private readonly repo: GiftRepository) { }
 
     getGiftList() {
         return this.giftList.slice(); // traz a copia do array
@@ -23,12 +24,16 @@ export class GiftService {
     }
 
     getCategories() {
-        return this.repository.getAllCategories().pipe(
+        return this.repo.getAllCategories().pipe(
             tap(value => console.log('Categorias carregadas:', value)),
             catchError(err => {
                 console.error('Erro ao buscar categorias:', err);
                 return of([] as Category[]);
             })
         );
+    }
+
+    saveGift(formData: FormData): Observable<any> {
+        return this.repo.saveGift(formData);
     }
 }

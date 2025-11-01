@@ -34,59 +34,57 @@
         <div class="card-body">
             <h5 class="card-title mb-3">Cadastro de presentes</h5>
 
-            <form>
+            <form [formGroup]="giftForm">
                 <div class="row">
                     <div class="col-md-4 mb-3">
-                        <label for="name" class="form-label">Nome Pt-br</label>
-                        <input type="text" id="name" class="form-control" #nameInput />
+                        <label class="form-label">Nome Pt-br</label>
+                        <input type="text" class="form-control" formControlName="namePt" />
                     </div>
                     <div class="col-md-4 mb-3">
-                        <label for="name" class="form-label">Nome En</label>
-                        <input type="text" id="name" class="form-control" #nameInput />
+                        <label class="form-label">Nome En</label>
+                        <input type="text" class="form-control" formControlName="nameEn" />
                     </div>
                     <div class="col-md-4 mb-3">
-                        <label for="name" class="form-label">Nome Es</label>
-                        <input type="text" id="name" class="form-control" #nameInput />
+                        <label class="form-label">Nome Es</label>
+                        <input type="text" class="form-control" formControlName="nameEs" />
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-4 mb-3">
-                        <label for="description" class="form-label">Descrição PT-BR</label>
-                        <textarea id="description" class="form-control" formControlName="description"
-                            rows="3"></textarea>
+                        <label class="form-label">Descrição PT-BR</label>
+                        <textarea class="form-control" formControlName="descPt"></textarea>
                     </div>
                     <div class="col-md-4 mb-3">
-                        <label for="description" class="form-label">Descrição EN</label>
-                        <textarea id="description" class="form-control" formControlName="description"
-                            rows="3"></textarea>
+                        <label class="form-label">Descrição EN</label>
+                        <textarea class="form-control" formControlName="descEn"></textarea>
                     </div>
                     <div class="col-md-4 mb-3">
-                        <label for="description" class="form-label">Descrição ES</label>
-                        <textarea id="description" class="form-control" formControlName="description"
-                            rows="3"></textarea>
+                        <label class="form-label">Descrição ES</label>
+                        <textarea class="form-control" formControlName="descEs"></textarea>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="category" class="form-label">Categoria</label>
-                        <select id="category" class="form-select" #categoryInput>
+                        <select id="category" class="form-select" formControlName="categoryId">
                             @for (cat of categoryList; track cat.id) {
                             <option [value]="cat.id">{{ cat.translations.en.name }}</option>
                             }
                         </select>
                     </div>
+
                     <div class="col-md-4 mb-3">
-                        <label for="name" class="form-label">Valor</label>
-                        <input type="text" id="name" class="form-control" #nameInput />
+                        <label for="value" class="form-label">Valor</label>
+                        <input type="text" id="value" class="form-control" formControlName="value" />
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="image" class="form-label">Imagem</label>
-                        <input type="file" id="image" class="form-control" #imageInput />
+                        <input type="file" id="image" class="form-control" (change)="onFileSelected($event)" />
                     </div>
                 </div>
 
@@ -102,6 +100,7 @@
                     </button>
                 </div>
             </form>
+
         </div>
     </div>
 </main>
